@@ -2,12 +2,14 @@ class User < ActiveRecord::Base
   belongs_to :tenant
   has_many :loans
   has_many :loan_requests
+  # Are you still using this?
   has_many :user_roles
   has_many :roles, through: :user_roles
 
   has_secure_password
 
   validates :first_name, presence: true
+  # Maybe don't validate format at all.
   EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/
   validates :email, presence: true,
                     format: { with: EMAIL_REGEX },
@@ -17,6 +19,7 @@ class User < ActiveRecord::Base
                                  too_long: 'must have at most %{count} letters' }
   validates :password, length: { minimum: 6 }, allow_blank: true
 
+  # Burn these with fire.
   before_validation :assign_username
   before_validation :check_last_name
 
@@ -24,7 +27,8 @@ class User < ActiveRecord::Base
     roles.any? { |role| role.name == 'admin' }
   end
 
-  def is_a_tenant?
+  # Consistency is worth it.
+  def is_tenant?
     tenant_id != nil
   end
 

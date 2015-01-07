@@ -7,8 +7,10 @@ class CartController < ApplicationController
     end
   end
 
+  # Are we sure all of the branches of these conditionals are tested?
   def create
-    if params["loan_requests"] != nil
+    if params["loan_requests"]
+      # What does lr_id mean?
       params["loan_requests"].each { |lr_id| cart.add_loan(lr_id) }
       if current_user
         redirect_to cart_index_path
@@ -20,6 +22,7 @@ class CartController < ApplicationController
     end
   end
 
+  # Extract at least 4 methods from here.
   def update
     @checkout_loans = []
     @checkout_amounts = []
@@ -29,10 +32,13 @@ class CartController < ApplicationController
       Loan.create!(user_id: current_user.id, loan_request_id: lr_id, amount: funding)
     end
     LoanMailer.lent_money(current_user, @checkout_loans, @checkout_amounts).deliver
+    # Be wary of each_with_index.
     @checkout_loans.each_with_index do |loan, index|
       LoanMailer.received_money(current_user, loan, @checkout_amounts[index]).deliver
     end
     session['cart'] = nil
+    # Use the :notice key on redirect_to
+    # Consistency is worth it.
     flash[:notice] = 'Thanks for your order.'
     redirect_to loans_path
   end

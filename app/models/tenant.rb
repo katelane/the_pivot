@@ -11,6 +11,10 @@ class Tenant < ActiveRecord::Base
 
   before_save :generate_slug
 
+  # private whenever possible.
+
+  private
+
   def generate_slug
     self.slug = name.parameterize
   end

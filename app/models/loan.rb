@@ -6,4 +6,5 @@ class Loan < ActiveRecord::Base
   validates :loan_request_id, presence: true
   validates :amount, presence: true
 
+  # Trailing whitespace. Broken window.
 end

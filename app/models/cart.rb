@@ -18,7 +18,8 @@ class Cart
   end
 
   def add_loan(id)
-    loans[id] = nil
+    # nil is almost never what you want. :)
+    loans[id] = 0.to_money
   end
 
   def add_amounts_to_loans(amounts)
@@ -27,6 +28,8 @@ class Cart
     end
   end
 
+  # Broken window!
+  #
   # TODO: implement removing items
   # def remove_item
   #
